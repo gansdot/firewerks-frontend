@@ -1,0 +1,1 @@
+const VITE_API_URL = https://api.firewerks.in
