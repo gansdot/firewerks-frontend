@@ -1,20 +1,22 @@
 import React from "react";
 import Slider from "react-slick";
 import { Box, Typography } from "@mui/material";
+const BASE_URL = import.meta.env.VITE_BASE;
+//image={`${BASE_URL}${p.image}`}
 
 const bannerImages = [
   {
-    url: "http://localhost:8000/uploads/1761749636977-845724340.png",
+    url: `${BASE_URL}/uploads/1761749636977-845724340.png`,
     title: "Celebrate this Diwali with Joy",
     subtitle: "Premium Crackers at Festive Discounts",
   },
   {
-    url: "http://localhost:8000/uploads/1761749644566-549893783.png",
+    url: `${BASE_URL}/uploads/1761749644566-549893783.png`,
     title: "Eco-Friendly Crackers",
     subtitle: "Safety, Fun, and Environment Together",
   },
   {
-    url: "http://localhost:8000/uploads/1761750296703-321287277.png",
+    url: `${BASE_URL}/uploads/1761750296703-321287277.png`,
     title: "Mega Offers on Combo Packs",
     subtitle: "Bulk Discounts for Families and Events",
   },
