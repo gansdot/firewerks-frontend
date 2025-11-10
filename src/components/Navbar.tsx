@@ -221,9 +221,9 @@ const Navbar: React.FC = () => {
                     },
                   }}
                 >
-                  {adminPages.map((item) => (
+                  {adminPages.map((item, idx) => (
                     <MenuItem
-                      key={item.key}
+                      key={idx}
                       onClick={() => {
                         handleNav(item.path);
                         handleAdminClose();

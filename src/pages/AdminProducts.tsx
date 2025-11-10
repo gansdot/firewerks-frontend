@@ -1,3 +1,6 @@
+const BASE_URL = import.meta.env.VITE_BASE;
+const BASE_API_URL = import.meta.env.VITE_API_BASE;
+
 import React, { useEffect, useState } from "react";
 import {
   Container,
@@ -55,10 +58,9 @@ const Admin: React.FC = () => {
 
     const formData = new FormData();
 
-    console.log("uploaded file path ::::: ", file);
     formData.append("image", file);
 
-    const res = await fetch("http://localhost:8000/api/upload", {
+    const res = await fetch(`${BASE_API_URL}/upload`, {
       method: "POST",
       body: formData,
     });
@@ -184,7 +186,7 @@ const Admin: React.FC = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`http://localhost:8000${p.image}`}
+                image={`${BASE_URL}${p.image}`}
                 alt={p.name}
                 sx={{
                   objectFit: "cover",
@@ -315,7 +317,7 @@ const Admin: React.FC = () => {
 
           {form.image && (
             <img
-              src={`http://localhost:8000${form.image}`}
+              src={`${BASE_URL}${form.image}`}
               alt="preview"
               style={{
                 width: "100%",

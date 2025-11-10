@@ -15,6 +15,7 @@ import {
 import { Add, Remove, Delete, ShoppingCartCheckout } from "@mui/icons-material";
 import { useCart } from "../context/CartContext";
 import { motion } from "framer-motion";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 interface CartDrawerProps {
   open: boolean;
@@ -88,7 +89,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                 >
                   <ListItemAvatar>
                     <Avatar
-                      src={`http://localhost:8000${item.image}`}
+                      src={`${BASE_URL}${item.image}`}
                       alt={item.name}
                       sx={{ width: 50, height: 50, borderRadius: 2 }}
                       variant="square"

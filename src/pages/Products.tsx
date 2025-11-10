@@ -14,6 +14,7 @@ import {
 
 import { truncateWords, fetchApi } from "../api/fetchClient";
 import { useCart } from "../context/CartContext";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 interface Product {
   _id: string;
@@ -88,7 +89,7 @@ const Products = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`http://localhost:8000${product.image}`}
+                image={`${BASE_URL}${product.image}`}
                 alt={product.name}
                 sx={{
                   objectFit: "cover",

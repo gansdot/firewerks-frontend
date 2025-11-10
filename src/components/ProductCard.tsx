@@ -10,6 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useCart } from "../context/CartContext";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 interface ProductCardProps {
   product: {
@@ -55,7 +56,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       >
         <CardMedia
           component="img"
-          image={`http://localhost:8000${product.image}`}
+          image={`${BASE_URL}${product.image}`}
           alt={product.name}
           sx={{
             height: 200,

@@ -1,9 +1,9 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_API_URL = import.meta.env.VITE_API_BASE;
 
 export async function fetchApi(endpoint: string, options: any = {}) {
   const token = localStorage.getItem("token");
-  console.log(`${BASE_URL}${endpoint}`);
-  const res = await fetch(`${BASE_URL}${endpoint}`, {
+  console.log(`${BASE_API_URL}${endpoint}`);
+  const res = await fetch(`${BASE_API_URL}${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : { Authorization: `` })

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { Box, Card, CardMedia, Typography, IconButton } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 interface RelatedProductsCarouselProps {
   products: any[];
@@ -100,7 +101,7 @@ const RelatedProductsCarousel: React.FC<RelatedProductsCarouselProps> = ({
             <CardMedia
               component="img"
               height="200"
-              image={`http://localhost:8000${item.image}`}
+              image={`${BASE_URL}${item.image}`}
               alt={item.name}
               sx={{ objectFit: "contain", p: 1 }}
             />

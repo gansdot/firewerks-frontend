@@ -8,6 +8,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { Add, Remove, Delete } from "@mui/icons-material";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 interface CartItemProps {
   item: {
@@ -43,7 +44,7 @@ const CartItem: React.FC<CartItemProps> = ({
       <CardMedia
         component="img"
         sx={{ width: 80, height: 80, objectFit: "contain", m: 1 }}
-        image={`http://localhost:8000${item.image}`}
+        image={`${BASE_URL}${item.image}`}
         alt={item.name}
       />
       <CardContent sx={{ flex: 1 }}>

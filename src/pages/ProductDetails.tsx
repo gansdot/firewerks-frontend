@@ -26,6 +26,7 @@ import ReviewSummary from "../components/ReviewSummary";
 import ReviewModal from "../components/ReviewModal";
 import { useUser } from "../context/UserContext";
 import { Snackbar, Alert } from "@mui/material";
+const BASE_URL = import.meta.env.VITE_BASE;
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -153,7 +154,7 @@ const ProductDetails = () => {
               >
                 <CardMedia
                   component="img"
-                  image={`http://localhost:8000${product.image}`}
+                  image={`${BASE_URL}${product.image}`}
                   alt="thumb"
                 />
               </Card>
@@ -172,7 +173,7 @@ const ProductDetails = () => {
                   <CardMedia
                     component="img"
                     alt={product.name}
-                    image={`http://localhost:8000${product.image}`}
+                    image={`${BASE_URL}${product.image}`}
                     sx={{
                       width: "100%",
                       objectFit: "contain",

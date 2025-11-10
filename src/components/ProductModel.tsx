@@ -9,7 +9,9 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import {fetchApi} from "../api/fetchClient";
+import { fetchApi } from "../api/fetchClient";
+const BASE_URL = import.meta.env.VITE_BASE;
+const BASE_API_URL = import.meta.env.VITE_API_BASE;
 
 interface ProductModalProps {
   open: boolean;
@@ -18,7 +20,12 @@ interface ProductModalProps {
   onSave: () => void;
 }
 
-const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onSave }) => {
+const ProductModal: React.FC<ProductModalProps> = ({
+  open,
+  onClose,
+  product,
+  onSave,
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -38,9 +45,15 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
         category: product.category || "",
         image: product.image || "",
       });
-      setPreview(product.image ? `http://localhost:8000${product.image}` : null);
+      setPreview(product.image ? `${BASE_URL}${product.image}` : null);
     } else {
-      setFormData({ name: "", description: "", price: "", category: "", image: "" });
+      setFormData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        image: "",
+      });
       setPreview(null);
     }
   }, [product]);
@@ -60,7 +73,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
     const formDataImg = new FormData();
     formDataImg.append("image", file);
 
-    const res = await fetch("http://localhost:8000/api/upload", {
+    const res = await fetch(`${BASE_API_URL}/upload`, {
       method: "POST",
       body: formDataImg,
     });
@@ -71,7 +84,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
   const handleSubmit = async () => {
     try {
       const imageUrl = await uploadImage();
-      console.log("image url ********* ", imageUrl)
+      console.log("image url ********* ", imageUrl);
       const payload = { ...formData, image: imageUrl };
 
       if (product?._id) {
@@ -90,7 +103,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
       onClose();
     } catch (error) {
       console.error("Product save error:", error);
-    } 
+    }
   };
 
   return (
@@ -133,7 +146,12 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
           <Box>
             <Button variant="contained" component="label">
               Upload Image
-              <input type="file" hidden accept="image/*" onChange={handleFileChange} />
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                onChange={handleFileChange}
+              />
             </Button>
 
             {preview && (
@@ -145,7 +163,12 @@ const ProductModal: React.FC<ProductModalProps> = ({ open, onClose, product, onS
                   component="img"
                   src={preview}
                   alt="Preview"
-                  sx={{ height: 150, borderRadius: 2, objectFit: "cover", border: "1px solid #ccc" }}
+                  sx={{
+                    height: 150,
+                    borderRadius: 2,
+                    objectFit: "cover",
+                    border: "1px solid #ccc",
+                  }}
                 />
               </Box>
             )}
