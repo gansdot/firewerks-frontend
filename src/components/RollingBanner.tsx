@@ -6,17 +6,17 @@ const BASE_URL = import.meta.env.VITE_BASE;
 
 const bannerImages = [
   {
-    url: `${BASE_URL}/uploads/1761749636977-845724340.png`,
+    url: `${BASE_URL}/uploads/banner1.png`,
     title: "Celebrate this Diwali with Joy",
     subtitle: "Premium Crackers at Festive Discounts",
   },
   {
-    url: `${BASE_URL}/uploads/1761749644566-549893783.png`,
+    url: `${BASE_URL}/uploads/banner2.png`,
     title: "Eco-Friendly Crackers",
     subtitle: "Safety, Fun, and Environment Together",
   },
   {
-    url: `${BASE_URL}/uploads/1761750296703-321287277.png`,
+    url: `${BASE_URL}/uploads/banner3.png`,
     title: "Mega Offers on Combo Packs",
     subtitle: "Bulk Discounts for Families and Events",
   },
