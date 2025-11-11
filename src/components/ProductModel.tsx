@@ -64,6 +64,8 @@ const ProductModal: React.FC<ProductModalProps> = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
+    console.log("image file ..... ", file);
+
     setFile(file);
     if (file) setPreview(URL.createObjectURL(file));
   };
