@@ -128,6 +128,10 @@ const Checkout: React.FC = () => {
         }
       );
       console.log("checkout page razor pay order ", razorOrder);
+      console.log(
+        "checkout page razor pay import.meta.env.VITE_RAZORPAY_KEY_ID :: ",
+        import.meta.env.VITE_RAZORPAY_KEY_ID
+      );
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: razorOrder.amount,
