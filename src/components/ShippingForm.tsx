@@ -72,14 +72,18 @@ const ShippingFormInner: ForwardRefRenderFunction<
       });
     }
   }, [user]);
-
+  /*
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+*/
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" })); // clear error as user types
+  };
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.name) newErrors.name = "Name is required";
@@ -102,69 +106,59 @@ const ShippingFormInner: ForwardRefRenderFunction<
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <TextField
         label="Full Name"
-        name="name"
-        id="name"
         value={formData.name}
-        onChange={handleChange}
+        onChange={(e) => handleChange("name", e.target.value)}
+        error={!!errors.name}
+        helperText={errors.name}
         fullWidth
-        required
       />
       <TextField
         label="Email"
-        name="email"
-        id="email"
-        type="email"
         value={formData.email}
-        onChange={handleChange}
+        onChange={(e) => handleChange("email", e.target.value)}
+        error={!!errors.email}
+        helperText={errors.email}
         fullWidth
-        required
       />
       <TextField
-        label="Phone Number"
-        name="phone"
-        id="phone"
-        type="tel"
+        label="Phone"
         value={formData.phone}
-        onChange={handleChange}
+        onChange={(e) => handleChange("phone", e.target.value)}
+        error={!!errors.phone}
+        helperText={errors.phone}
         fullWidth
-        required
       />
       <TextField
         label="Address"
-        name="address"
-        id="address"
         value={formData.address}
-        onChange={handleChange}
+        onChange={(e) => handleChange("address", e.target.value)}
+        error={!!errors.address}
+        helperText={errors.address}
         fullWidth
-        required
       />
       <TextField
         label="City"
-        name="city"
-        id="city"
         value={formData.city}
-        onChange={handleChange}
+        onChange={(e) => handleChange("city", e.target.value)}
+        error={!!errors.city}
+        helperText={errors.city}
         fullWidth
-        required
       />
       <TextField
         label="Postal Code"
-        name="postalcode"
-        id="postalcode"
         value={formData.postalcode}
-        onChange={handleChange}
+        onChange={(e) => handleChange("postalcode", e.target.value)}
+        error={!!errors.postalcode}
+        helperText={errors.postalcode}
         fullWidth
-        required
       />
       <TextField
         label="Country"
-        name="country"
-        select
-        SelectProps={{ native: true }}
         value={formData.country}
-        onChange={handleChange}
+        onChange={(e) => handleChange("country", e.target.value)}
+        error={!!errors.country}
+        helperText={errors.country}
         fullWidth
-        required
       >
         {countries.map((c) => (
           <option key={c} value={c}>

@@ -13,15 +13,21 @@ import {
   Badge,
   Grow,
   InputBase,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Divider,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
-import logo from "../assets/fireworks.png"; // your logo image
-//import logo from "../assets/logo.png"; // your logo image
+import logo from "../assets/fireworks.png";
 import CartDrawer from "./CartDrawer";
 
 const pages = [
@@ -34,19 +40,14 @@ const pages = [
 const adminPages = [
   { name: "Manage Products", path: "/admin", key: 31 },
   { name: "Manage Orders", path: "/admin-orders", key: 32 },
-  { name: "Manage Queries", path: "/admin-contact", key: 32 },
-];
-
-const settings = [
-  { name: "Profile", path: "/user/profile", key: 1 },
-  { name: "My Orders", path: "/orders", key: 2 },
-  { name: "Logout", path: "/logout", key: 3 },
+  { name: "Manage Queries", path: "/admin-contact", key: 33 },
 ];
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const { user, logout } = useUser();
   const {
@@ -58,20 +59,20 @@ const Navbar: React.FC = () => {
     drawerOpen,
     setDrawerOpen,
   } = useCart();
-  const [cartOpen, setCartOpen] = React.useState(false);
 
-  // menu anchors
   const [adminAnchor, setAdminAnchor] = useState<null | HTMLElement>(null);
   const [userAnchor, setUserAnchor] = useState<null | HTMLElement>(null);
 
-  const handleNav = (path: string) => navigate(path);
+  const handleNav = (path: string) => {
+    navigate(path);
+    setMobileOpen(false);
+  };
 
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   const handleAdminOpen = (event: React.MouseEvent<HTMLElement>) =>
     setAdminAnchor(event.currentTarget);
   const handleAdminClose = () => setAdminAnchor(null);
-
   const handleUserOpen = (event: React.MouseEvent<HTMLElement>) =>
     setUserAnchor(event.currentTarget);
   const handleUserClose = () => setUserAnchor(null);
@@ -83,21 +84,23 @@ const Navbar: React.FC = () => {
     navigate("/login");
   };
 
-  function handleLogin(): void {
+  const handleLogin = () => {
     clearCart();
     logout();
     navigate("/login");
-  }
+  };
 
-  function handleUserRegister() {
+  const handleUserRegister = () => {
     clearCart();
     logout();
     navigate("/register");
-  }
+  };
+
   const handleCheckout = () => {
     setDrawerOpen(false);
-    navigate("/checkout"); // or trigger your payment flow
+    navigate("/checkout");
   };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -106,6 +109,78 @@ const Navbar: React.FC = () => {
       setQuery("");
     }
   };
+
+  // --- Drawer (for mobile nav) ---
+  const drawer = (
+    <Box
+      sx={{ width: 250, p: 2 }}
+      role="presentation"
+      onClick={() => setMobileOpen(false)}
+    >
+      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+        Firewerks Menu
+      </Typography>
+      <Divider />
+      <List>
+        {pages.map((page) => (
+          <ListItem key={page.key} disablePadding>
+            <ListItemButton onClick={() => handleNav(page.path)}>
+              <ListItemText primary={page.name} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+        {user?.isAdmin && (
+          <>
+            <Divider sx={{ my: 1 }} />
+            <Typography variant="subtitle2" sx={{ pl: 2, pb: 0.5 }}>
+              Admin
+            </Typography>
+            {adminPages.map((item) => (
+              <ListItem key={item.key} disablePadding>
+                <ListItemButton onClick={() => handleNav(item.path)}>
+                  <ListItemText primary={item.name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </>
+        )}
+        <Divider sx={{ my: 1 }} />
+        {user ? (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleNav("/user/profile")}>
+                <ListItemText primary="Profile" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleNav("/orders")}>
+                <ListItemText primary="My Orders" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogout}>
+                <ListItemText primary="Logout" />
+              </ListItemButton>
+            </ListItem>
+          </>
+        ) : (
+          <>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleLogin}>
+                <ListItemText primary="Login" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={handleUserRegister}>
+                <ListItemText primary="Register" />
+              </ListItemButton>
+            </ListItem>
+          </>
+        )}
+      </List>
+    </Box>
+  );
+
   return (
     <AppBar
       position="sticky"
@@ -118,8 +193,18 @@ const Navbar: React.FC = () => {
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
-        {/* --- Left Section: Logo + Nav Items --- */}
+        {/* --- Left Section: Logo + Hamburger --- */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {/* Hamburger for mobile */}
+          <IconButton
+            color="inherit"
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          {/* Logo + Title */}
           <Box
             component="img"
             src={logo}
@@ -128,24 +213,20 @@ const Navbar: React.FC = () => {
               width: 45,
               height: 45,
               borderRadius: "50%",
-              objectFit: "cover",
               cursor: "pointer",
             }}
             onClick={() => handleNav("/")}
           />
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "column", // 👈 makes name & tagline vertical
+              display: { xs: "none", sm: "flex" },
+              flexDirection: "column",
               alignItems: "flex-start",
-              lineHeight: 1,
             }}
           >
-            {/* Company Name */}
             <Typography
               variant="h4"
               sx={{
-                //fontFamily: '"Are You Serious", cursive',
                 fontFamily: `"Dancing Script"`,
                 color: "primary.main",
                 fontWeight: 600,
@@ -155,8 +236,6 @@ const Navbar: React.FC = () => {
             >
               Firewerks
             </Typography>
-
-            {/* Tagline */}
             <Typography
               variant="subtitle2"
               sx={{
@@ -170,8 +249,16 @@ const Navbar: React.FC = () => {
               No Festival without me !!!
             </Typography>
           </Box>
-          {/* Navigation Buttons */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: 4 }}>
+
+          {/* Desktop Nav Buttons */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+              gap: 2,
+              ml: 4,
+            }}
+          >
             {pages.map((page) => (
               <Button
                 key={page.key}
@@ -189,8 +276,6 @@ const Navbar: React.FC = () => {
                 {page.name}
               </Button>
             ))}
-
-            {/* Admin dropdown (only for admin users) */}
             {user?.isAdmin && (
               <>
                 <Button
@@ -217,21 +302,15 @@ const Navbar: React.FC = () => {
                       backdropFilter: "blur(10px)",
                       borderRadius: "12px",
                       color: "#000",
-                      boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
                     },
                   }}
                 >
-                  {adminPages.map((item, idx) => (
+                  {adminPages.map((item) => (
                     <MenuItem
-                      key={idx}
+                      key={item.key}
                       onClick={() => {
                         handleNav(item.path);
                         handleAdminClose();
-                      }}
-                      sx={{
-                        "&:hover": {
-                          background: "rgba(255,255,255,0.35)",
-                        },
                       }}
                     >
                       {item.name}
@@ -242,7 +321,8 @@ const Navbar: React.FC = () => {
             )}
           </Box>
         </Box>
-        {/* Middle: Search Bar (animated) */}
+
+        {/* --- Middle: Search Bar --- */}
         <Grow in={showSearch}>
           <Box
             component="form"
@@ -280,6 +360,7 @@ const Navbar: React.FC = () => {
           >
             {showSearch ? <CloseIcon /> : <SearchIcon />}
           </IconButton>
+
           <IconButton
             size="large"
             aria-label="cart"
@@ -290,21 +371,13 @@ const Navbar: React.FC = () => {
               <ShoppingCartIcon />
             </Badge>
           </IconButton>
-          {/** <CartDrawer
-            drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
-            cartItems={cart}
-            total={total}
-            updateQuantity={updateQuantity}
-            removeFromCart={removeFromCart}
-            onCheckout={handleCheckout}
-          />*/}
 
           <CartDrawer
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
             onCheckout={handleCheckout}
           />
+
           {user ? (
             <>
               <Tooltip title={`Logged in as ${user.name}`}>
@@ -328,15 +401,6 @@ const Navbar: React.FC = () => {
                 anchorEl={userAnchor}
                 open={Boolean(userAnchor)}
                 onClose={handleUserClose}
-                PaperProps={{
-                  sx: {
-                    background: "rgba(255, 255, 255, 0.25)",
-                    backdropFilter: "blur(10px)",
-                    borderRadius: "12px",
-                    color: "#000",
-                    boxShadow: "0 4px 30px rgba(0,0,0,0.1)",
-                  },
-                }}
               >
                 <MenuItem onClick={() => handleNav("/user/profile")}>
                   Profile
@@ -348,35 +412,26 @@ const Navbar: React.FC = () => {
               </Menu>
             </>
           ) : (
-            <>
-              <Button
-                color="inherit"
-                onClick={handleLogin}
-                sx={{
-                  color: "#000",
-                  fontWeight: 500,
-                  textTransform: "none",
-                  "&:hover": { background: "rgba(255,255,255,0.3)" },
-                }}
-              >
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+              <Button color="inherit" onClick={handleLogin}>
                 Login
               </Button>
-              <Button
-                color="inherit"
-                onClick={handleUserRegister}
-                sx={{
-                  color: "#000",
-                  fontWeight: 500,
-                  textTransform: "none",
-                  "&:hover": { background: "rgba(255,255,255,0.3)" },
-                }}
-              >
+              <Button color="inherit" onClick={handleUserRegister}>
                 Register
               </Button>
-            </>
+            </Box>
           )}
         </Box>
       </Toolbar>
+
+      {/* Drawer for Mobile Menu */}
+      <Drawer
+        anchor="left"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      >
+        {drawer}
+      </Drawer>
     </AppBar>
   );
 };

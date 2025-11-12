@@ -33,9 +33,13 @@ declare global {
 const Checkout: React.FC = () => {
   const { cart, total, clearCart, updateQuantity, removeFromCart } =
     useContext(CartContext);
-  const shippingRef = useRef<ShippingFormRef | null>(null);
-
   const { user } = useUser();
+
+  const shippingRef = useRef<ShippingFormRef | null>(null);
+  const checkoutToPay =
+    user === null || undefined
+      ? "Please fill above details & proceed to pay as Guest"
+      : "Proceed to Pay";
   const isGuest = !user;
   const [guestInfo, setGuestInfo] = useState({
     name: "",
@@ -49,7 +53,6 @@ const Checkout: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [paidOrder, setPaidOrder] = useState(false);
   const [error, setError] = useState("");
-
   const totalAmount = total;
   const [isRazorReady, setIsRazorReady] = useState(false);
   const navigate = useNavigate();
@@ -72,19 +75,15 @@ const Checkout: React.FC = () => {
   }, []);
 
   const handleCheckout = async () => {
-    const token = localStorage.getItem("token");
-    console.log("token in checkout ", token);
-
-    if (!token) {
-      alert("Please login to proceed to checkout.");
-      navigate("/login");
+    if (!shippingRef.current) return;
+    const ok = shippingRef.current.validate();
+    if (!ok) {
+      // validation failed, form will highlight fields automatically
       return;
     }
 
-    if (!shippingRef.current) return;
-    const ok = shippingRef.current.validate();
-    if (!ok) return; // validation errors show inside ShippingForm
     const shippingData = shippingRef.current.getData();
+    console.log("Shipping data:", shippingData);
 
     try {
       if (!isRazorReady) {
@@ -263,7 +262,7 @@ const Checkout: React.FC = () => {
                 sx={{ width: "100%" }}
                 onClick={handleCheckout}
               >
-                Proceed to Pay
+                {checkoutToPay}
               </Button>
             </Box>
           </Paper>
