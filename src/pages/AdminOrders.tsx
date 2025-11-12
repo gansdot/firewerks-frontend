@@ -118,6 +118,9 @@ const AdminOrders = () => {
 
   return (
     <Container sx={{ mt: 5 }}>
+      <Typography variant="h4" textAlign="center" mb={3}>
+        🧨 Admin Panel – Manage Orders
+      </Typography>
       <Paper sx={{ padding: 2 }}>
         <TableContainer>
           <Table>
@@ -133,7 +136,9 @@ const AdminOrders = () => {
             <TableBody>
               {orders.map((order) => (
                 <TableRow key={order._id} hover>
-                  <TableCell>{order._id}</TableCell>
+                  <TableCell>
+                    {order.paymentId?.slice(-6).toUpperCase()}
+                  </TableCell>
                   <TableCell>
                     {order.userName || order.userEmail || "Guest"}
                   </TableCell>

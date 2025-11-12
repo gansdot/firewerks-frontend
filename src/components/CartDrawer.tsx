@@ -11,10 +11,13 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Add, Remove, Delete, ShoppingCartCheckout } from "@mui/icons-material";
 import { useCart } from "../context/CartContext";
 import { motion } from "framer-motion";
+
 const BASE_URL = import.meta.env.VITE_BASE;
 
 interface CartDrawerProps {
@@ -29,19 +32,25 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
   onCheckout,
 }) => {
   const { cart, total, removeFromCart, updateQuantity } = useCart();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Drawer
-      anchor="right"
+      anchor={isMobile ? "bottom" : "right"}
       open={open}
       onClose={onClose}
       sx={{
         "& .MuiDrawer-paper": {
-          width: 380,
+          width: isMobile ? "100%" : 380,
+          height: isMobile ? "70vh" : "100%",
           background: "rgba(230, 214, 214, 0.98)",
           backdropFilter: "blur(20px)",
           color: "#000",
-          borderLeft: "1px solid rgba(255,255,255,0.3)",
+          borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.3)",
+          borderTop: isMobile ? "1px solid rgba(255,255,255,0.3)" : "none",
+          borderTopLeftRadius: isMobile ? "16px" : 0,
+          borderTopRightRadius: isMobile ? "16px" : 0,
           boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
           display: "flex",
           flexDirection: "column",
@@ -49,7 +58,13 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
       }}
     >
       {/* Header */}
-      <Box sx={{ p: 3, borderBottom: "1px solid rgba(255,255,255,0.2)" }}>
+      <Box
+        sx={{
+          p: 3,
+          borderBottom: "1px solid rgba(255,255,255,0.2)",
+          textAlign: "center",
+        }}
+      >
         <Typography variant="h6" fontWeight="bold">
           🛒 Your Cart
         </Typography>
@@ -159,8 +174,6 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
           borderTop: "1px solid rgba(255,255,255,0.2)",
           background: "rgba(255,255,255,0.25)",
           backdropFilter: "blur(10px)",
-          position: "sticky",
-          bottom: 0,
         }}
       >
         <Divider sx={{ mb: 2 }} />
@@ -175,7 +188,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
           <Typography variant="h6" fontWeight="bold">
             Total
           </Typography>
-          <Typography variant="h6" fontWeight="bold" color="primary">
+          <Typography variant="h6" fontWeight="bold" color="inherit">
             ₹{total.toFixed(2)}
           </Typography>
         </Box>

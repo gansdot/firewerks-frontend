@@ -139,19 +139,14 @@ const ProductDetails = () => {
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: "1400px", mx: "auto" }}>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: "1400px", mx: "auto" }}>
       <Grid container spacing={4}>
         {/* LEFT SIDE - Image Gallery */}
-        <Grid size={7}>
+        <Grid size={{ xs: 12, md: 7 }}>
           <Grid container spacing={2}>
             {/* Thumbnails */}
-            <Grid size={2}>
-              <Card
-                sx={{
-                  mb: 1,
-                  cursor: "pointer",
-                }}
-              >
+            <Grid size={{ xs: 2 }}>
+              <Card sx={{ mb: 1, cursor: "pointer" }}>
                 <CardMedia
                   component="img"
                   image={`${BASE_URL}${product.image}`}
@@ -161,7 +156,7 @@ const ProductDetails = () => {
             </Grid>
 
             {/* Main Image */}
-            <Grid size={10}>
+            <Grid size={{ xs: 10 }}>
               <Card
                 sx={{
                   borderRadius: 2,
@@ -177,7 +172,7 @@ const ProductDetails = () => {
                     sx={{
                       width: "100%",
                       objectFit: "contain",
-                      maxHeight: 550,
+                      maxHeight: { xs: 350, md: 550 },
                     }}
                   />
                 </Zoom>
@@ -187,7 +182,7 @@ const ProductDetails = () => {
         </Grid>
 
         {/* RIGHT SIDE - Product Info */}
-        <Grid size={5}>
+        <Grid size={{ xs: 12, md: 5 }}>
           <Typography variant="h5" fontWeight={600}>
             {product.name}
           </Typography>
@@ -200,18 +195,27 @@ const ProductDetails = () => {
               setFinalPrice(discounted);
             }}
           />
-          <Box display="flex" alignItems="center" gap={2} mt={2}>
-            <ReviewSummary {...reviewSummary} />{" "}
+
+          <Box
+            display="flex"
+            alignItems="center"
+            gap={2}
+            mt={2}
+            flexWrap="wrap"
+          >
+            <ReviewSummary {...reviewSummary} />
             <Button variant="outlined" onClick={handleWriteReview}>
               Write a Review
             </Button>
           </Box>
+
           <ReviewModal
             open={openReview}
             onClose={() => setOpenReview(false)}
             product={product}
             onReviewAdded={handleReviewAdded}
-          />{" "}
+          />
+
           {/* Snackbar Alert for Guests */}
           <Snackbar
             open={showLoginAlert}
@@ -227,14 +231,16 @@ const ProductDetails = () => {
               Please log in to write a review.
             </Alert>
           </Snackbar>
+
           <Divider sx={{ my: 2 }} />
+
           {/* Color Swatches */}
           {product.colors && (
             <>
               <Typography variant="subtitle1" fontWeight={600}>
                 Color
               </Typography>
-              <Box sx={{ display: "flex", setOpenReviewgap: 1, my: 1 }}>
+              <Box sx={{ display: "flex", gap: 1, my: 1 }}>
                 {product.colors.map((color: string) => (
                   <IconButton
                     key={color}
@@ -250,6 +256,7 @@ const ProductDetails = () => {
               <Divider sx={{ my: 2 }} />
             </>
           )}
+
           {/* Add to Cart Button */}
           <Button
             variant="contained"
@@ -275,7 +282,9 @@ const ProductDetails = () => {
           >
             Add to Cart
           </Button>
+
           <Divider sx={{ my: 3 }} />
+
           {/* Accordion sections */}
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -288,6 +297,7 @@ const ProductDetails = () => {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>How to fire safely</Typography>
@@ -298,6 +308,7 @@ const ProductDetails = () => {
               </Typography>
             </AccordionDetails>
           </Accordion>
+
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               <Typography>Delivery & Returns</Typography>
@@ -311,6 +322,7 @@ const ProductDetails = () => {
           </Accordion>
         </Grid>
       </Grid>
+
       {/* Divider */}
       <Divider sx={{ my: 5 }} />
 

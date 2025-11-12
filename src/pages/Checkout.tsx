@@ -1,28 +1,19 @@
 import React, { useState, useContext, useEffect, useRef, useMemo } from "react";
 import {
   Button,
-  Card,
-  CardContent,
   Container,
   Box,
-  TextField,
   Typography,
-  Stack,
-  CardMedia,
   Divider,
-  IconButton,
   Grid,
   Paper,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { fetchApi } from "../api/fetchClient.js";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import ShippingForm, { ShippingFormRef } from "../components/ShippingForm.js";
 import CartItem from "../components/CartItem.js";
-import { display } from "@mui/system";
 
 declare global {
   interface Window {
@@ -179,18 +170,29 @@ const Checkout: React.FC = () => {
   function onPlaceOrder(shipping: any): void {
     throw new Error("Function not implemented.");
   }
-
   return (
-    <Container sx={{ mt: 5 }}>
-      <Typography>{error}</Typography>
-      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid size={6}>
+    <Container sx={{ mt: 5, mb: 5 }}>
+      {error && (
+        <Typography color="error" mb={2}>
+          {error}
+        </Typography>
+      )}
+
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          flexDirection: { xs: "column", md: "row" }, // stack on mobile, side-by-side on desktop
+        }}
+      >
+        {/* LEFT: Cart Items */}
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper
             sx={{
               p: 2,
-              height: "80vh",
-              overflowY: "auto",
-              background: "rgba(255,255,255,0.7)", // subtle glass effect
+              height: { xs: "auto", md: "80vh" },
+              overflowY: { xs: "visible", md: "auto" },
+              background: "rgba(255,255,255,0.7)",
               backdropFilter: "blur(10px)",
             }}
           >
@@ -212,9 +214,12 @@ const Checkout: React.FC = () => {
                 />
               ))
             )}
+
+            {/* Order Summary */}
             <Box
               sx={{
                 textAlign: "right",
+                mt: 3,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "flex-end",
@@ -242,24 +247,39 @@ const Checkout: React.FC = () => {
             </Box>
           </Paper>
         </Grid>
-        <Grid size={6}>
+
+        {/* RIGHT: Shipping & Checkout */}
+        <Grid size={{ xs: 12, md: 6 }}>
           <Paper
             sx={{
               p: 2,
-              height: "80vh",
-              overflowY: "auto",
-              background: "rgba(255,255,255,0.7)", // subtle glass effect
+              height: { xs: "auto", md: "80vh" },
+              overflowY: { xs: "visible", md: "auto" },
+              background: "rgba(255,255,255,0.7)",
               backdropFilter: "blur(10px)",
             }}
           >
-            {/* ✅ Order Summary - RIGHT ALIGNED */}
+            <Typography
+              variant="h5"
+              fontWeight={600}
+              mb={2}
+              sx={{ textAlign: { xs: "center", md: "left" } }}
+            >
+              Shipping Details
+            </Typography>
 
             <ShippingForm ref={shippingRef} />
-            <Box sx={{ marginTop: 2, textAlign: "right" }}>
+
+            <Box sx={{ mt: 3 }}>
               <Button
                 variant="contained"
                 color="primary"
-                sx={{ width: "100%" }}
+                sx={{
+                  width: "100%",
+                  py: 1.2,
+                  fontWeight: 600,
+                  borderRadius: 2,
+                }}
                 onClick={handleCheckout}
               >
                 {checkoutToPay}

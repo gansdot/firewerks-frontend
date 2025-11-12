@@ -20,4 +20,5 @@ export interface Order {
   status: "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
   createdAt: string;
   updatedAt: string;
+  paymentId?: string;
 }
